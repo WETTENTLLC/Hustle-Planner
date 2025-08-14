@@ -1,0 +1,11 @@
+Force deployment trigger - 2024-12-19 19:46:00
+
+Latest updates:
+- Expenses & Earnings tracker added
+- Enhanced security headers
+- Encrypted local storage
+- Privacy notice modal
+- Auto-save functionality
+- ESLint rules disabled for production
+
+Ready for live deployment!
