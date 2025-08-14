@@ -1,6 +1,6 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "secure-the-bag-hustle-planner/.next",
+  "outputDirectory": ".next",
   "installCommand": "npm install",
   "headers": [
     {
