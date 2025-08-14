@@ -156,7 +156,7 @@ export default function FAQSection() {
       <div className="mt-10 p-6 bg-gray-800/60 dark:bg-gray-100/60 rounded-lg">
         <h3 className="text-lg font-semibold mb-3 text-white dark:text-gray-800">Didn't find an answer?</h3>
         <p className="text-gray-300 dark:text-gray-700 mb-4">
-          Have a question that&apos;s not covered here? Send us a message and we&apos;ll get back to you.
+          Have a question that is not covered here? Send us a message and we will get back to you.
         </p>
         <div className="space-y-3">
           <div>
