@@ -45,12 +45,12 @@ class SecureStorage {
     return key;
   }
 
-  setItem(key: string, value: any): void {
+  setItem(key: string, value: unknown): void {
     try {
       const serialized = JSON.stringify(value);
       const encrypted = this.encrypt(serialized);
       localStorage.setItem(this.storagePrefix + key, encrypted);
-    } catch (error) {
+    } catch {
       console.error('Failed to save data securely');
     }
   }
@@ -64,7 +64,7 @@ class SecureStorage {
       if (!decrypted) return null;
       
       return JSON.parse(decrypted);
-    } catch (error) {
+    } catch {
       console.error('Failed to retrieve data securely');
       return null;
     }

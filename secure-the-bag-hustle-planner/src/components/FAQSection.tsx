@@ -119,7 +119,9 @@ export default function FAQSection() {
                 aria-expanded={openIndex === index}
                 aria-controls={`panel-${index}`}
               >
-                <span className={searchQuery ? highlightMatches(faq.question, searchQuery) : faq.question} />
+                <span dangerouslySetInnerHTML={{
+                  __html: searchQuery ? highlightMatches(faq.question, searchQuery) : faq.question
+                }} />
                 <svg 
                   className={`w-5 h-5 transition-transform duration-200 ${openIndex === index ? 'transform rotate-180' : ''}`}
                   fill="none" 
@@ -154,7 +156,7 @@ export default function FAQSection() {
       <div className="mt-10 p-6 bg-gray-800/60 dark:bg-gray-100/60 rounded-lg">
         <h3 className="text-lg font-semibold mb-3 text-white dark:text-gray-800">Didn't find an answer?</h3>
         <p className="text-gray-300 dark:text-gray-700 mb-4">
-          Have a question that's not covered here? Send us a message and we'll get back to you.
+          Have a question that&apos;s not covered here? Send us a message and we&apos;ll get back to you.
         </p>
         <div className="space-y-3">
           <div>

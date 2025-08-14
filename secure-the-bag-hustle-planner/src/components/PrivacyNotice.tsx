@@ -39,7 +39,7 @@ export default function PrivacyNotice() {
 
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 mb-4">
           <p className="text-xs text-yellow-800 dark:text-yellow-200">
-            <strong>Important:</strong> Your data is only stored on this device. Clear your browser data will delete all information.
+            <strong>Important:</strong> Your data is only stored on this device. Clearing your browser data will delete all information.
           </p>
         </div>
 
