@@ -3,11 +3,6 @@
   "outputDirectory": "secure-the-bag-hustle-planner/.next",
   "installCommand": "cd secure-the-bag-hustle-planner && npm install",
   "framework": "nextjs",
-  "functions": {
-    "secure-the-bag-hustle-planner/src/app/**/*.{js,ts,jsx,tsx}": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
