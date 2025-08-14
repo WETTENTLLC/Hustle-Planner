@@ -1,8 +1,7 @@
 {
-  "buildCommand": "cd secure-the-bag-hustle-planner && npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "secure-the-bag-hustle-planner/.next",
-  "installCommand": "cd secure-the-bag-hustle-planner && npm install",
-  "framework": "nextjs",
+  "installCommand": "npm install",
   "headers": [
     {
       "source": "/(.*)",

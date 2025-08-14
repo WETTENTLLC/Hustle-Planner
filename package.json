@@ -1,0 +1,9 @@
+{
+  "name": "hustle-planner-root",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd secure-the-bag-hustle-planner && npm install && npm run build",
+    "start": "cd secure-the-bag-hustle-planner && npm start",
+    "dev": "cd secure-the-bag-hustle-planner && npm run dev"
+  }
+}
