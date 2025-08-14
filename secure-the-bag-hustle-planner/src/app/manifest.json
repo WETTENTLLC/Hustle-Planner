@@ -1,0 +1,23 @@
+{
+  "name": "Secure the Bag - Hustle Planner",
+  "short_name": "Secure the Bag",
+  "description": "Privacy-first planning for dancers - No login, no cloud, all data stays on your device",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1f2937",
+  "theme_color": "#ec4899",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

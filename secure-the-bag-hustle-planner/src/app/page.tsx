@@ -7,10 +7,12 @@ import TipsAccordion from '@/components/TipsAccordion';
 import ClientManager from '@/components/ClientManager';
 import ClientLoyalty from '@/components/ClientLoyalty';
 import HabitTracker from '@/components/HabitTracker';
+import ExpensesEarnings from '@/components/ExpensesEarnings';
 import FAQSection from '@/components/FAQSection';
 import Navigation from '@/components/Navigation';
 import ThemeToggle from '@/components/ThemeToggle';
 import Footer from '@/components/Footer';
+import PrivacyNotice from '@/components/PrivacyNotice';
 import { useTheme } from '@/components/ThemeProvider';
 
 export default function Home() {
@@ -92,6 +94,10 @@ export default function Home() {
             </>
           )}
           
+          {activeTab === 'expenses' && (
+            <ExpensesEarnings />
+          )}
+          
           {activeTab === 'faq' && (
             <>
               <h2 className="text-2xl font-bold mb-6 text-pink-400 dark:text-pink-600">Frequently Asked Questions</h2>
@@ -103,6 +109,9 @@ export default function Home() {
 
       {/* Footer */}
       <Footer />
+      
+      {/* Privacy Notice */}
+      <PrivacyNotice />
     </main>
   );
 }

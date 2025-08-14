@@ -1,7 +1,8 @@
+
 'use client';
 
-import { useState, useEffect } from 'react';
-import { generateId, getLocalStorage, setLocalStorage } from '@/lib/utils';
+import { useState, useEffect, useCallback } from 'react';
+import { generateId, getLocalStorage } from '@/lib/utils';
 
 interface Reminder {
   id: string;
@@ -11,6 +12,22 @@ interface Reminder {
   enabled: boolean;
   repeats: 'none' | 'daily' | 'weekly';
 }
+
+// Toggle a reminder on/off
+const handleToggleReminder = (id: string, reminders: Reminder[], setReminders: React.Dispatch<React.SetStateAction<Reminder[]>>) => {
+  setReminders((prev: Reminder[]) =>
+    prev.map((reminder: Reminder) =>
+      reminder.id === id
+        ? { ...reminder, enabled: !reminder.enabled }
+        : reminder
+    )
+  );
+};
+
+// Delete a reminder
+const handleDeleteReminder = (id: string, reminders: Reminder[], setReminders: React.Dispatch<React.SetStateAction<Reminder[]>>) => {
+  setReminders((prev: Reminder[]) => prev.filter((reminder: Reminder) => reminder.id !== id));
+};
 
 export default function ReminderForm() {
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -24,77 +41,87 @@ export default function ReminderForm() {
   const [showPermissionPrompt, setShowPermissionPrompt] = useState<boolean>(false);
   const [notificationSetupInfo, setNotificationSetupInfo] = useState<boolean>(false);
   
+  // Check if any reminders need to be triggered
+  const checkReminders = useCallback(() => {
+    if (notificationPermission !== 'granted' || typeof window === 'undefined') return;
+    const now = new Date();
+    const currentDate = now.toISOString().split('T')[0];
+    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    reminders.forEach(reminder => {
+      if (reminder.enabled && reminder.time === currentTime) {
+        let shouldFire = false;
+        switch(reminder.repeats) {
+          case 'none':
+            shouldFire = reminder.date === currentDate;
+            break;
+          case 'daily':
+            shouldFire = true;
+            break;
+          case 'weekly': {
+            const reminderDate = new Date();
+            const [year, month, day] = reminder.date.split('-').map(Number);
+            reminderDate.setFullYear(year, month - 1, day);
+            shouldFire = reminderDate.getDay() === now.getDay();
+            break;
+          }
+        }
+        if (shouldFire) {
+          new Notification('Hustle Planner Reminder', {
+            body: reminder.message,
+            icon: '/favicon.ico'
+          });
+          if (reminder.repeats === 'none') {
+            handleUpdateReminder(reminder.id, { enabled: false });
+          }
+        }
+      }
+    });
+  }, [notificationPermission, reminders]);
+
+  // Update an existing reminder
+  const handleUpdateReminder = (id: string, updates: Partial<Reminder>) => {
+    setReminders(prev =>
+      prev.map(reminder =>
+        reminder.id === id
+          ? { ...reminder, ...updates }
+          : reminder
+      )
+    );
+  };
+
   // Load reminders from localStorage and check notification permission on mount
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
     const savedReminders = getLocalStorage<Reminder[]>('hustle-reminders', []);
     setReminders(savedReminders);
-    
-    // Check notification permission
     if (typeof window !== 'undefined' && 'Notification' in window) {
       setNotificationPermission(Notification.permission);
-      
-      // Show permission prompt if not granted or denied yet
       if (Notification.permission === 'default') {
         setShowPermissionPrompt(true);
       }
     }
-    
-    // Set up reminder check interval
     const checkInterval = setInterval(() => {
       checkReminders();
-    }, 60000); // Check every minute
-    
+    }, 60000);
     return () => clearInterval(checkInterval);
-  }, []);
-  
-  // Save reminders to localStorage when updated
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    setLocalStorage('hustle-reminders', reminders);
-    
-    // Schedule active reminders
-    reminders
-      .filter(reminder => reminder.enabled)
-      .forEach(reminder => {
-        const [year, month, day] = reminder.date.split('-').map(Number);
-        const [hours, minutes] = reminder.time.split(':').map(Number);
-        
-        // Create date in local timezone
-        const reminderDate = new Date();
-        reminderDate.setFullYear(year, month - 1, day);
-        reminderDate.setHours(hours, minutes, 0, 0);
-        
-        // Only schedule future reminders
-        if (reminderDate > new Date()) {
-          scheduleNotification(
-            'Hustle Planner Reminder', 
-            reminder.message, 
-            reminderDate
-          );
-        }
-      });
-  }, [reminders]);
-  
-  // Request notification permissions
+  }, [checkReminders]);
   const handleRequestPermission = async () => {
-    const granted = await requestNotificationPermission();
-    setNotificationPermission(granted ? 'granted' : 'denied');
-    setShowPermissionPrompt(false);
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission();
+      setNotificationPermission(permission);
+      setShowPermissionPrompt(false);
+      const granted = permission === 'granted';
     
-    if (granted) {
-      // Show a test notification
-      const testNotification = new Notification('Notifications Enabled', {
-        body: 'You will now receive hustle reminders even when the app is closed.',
-        icon: '/favicon.ico'
-      });
-      
-      // Close the notification after 5 seconds
-      const timeoutId = setTimeout(() => testNotification.close(), 5000);
-      
-      // Clean up timeout if component unmounts
-      return () => clearTimeout(timeoutId);
+      if (granted) {
+        // Show a test notification
+        const testNotification = new Notification('Notifications Enabled', {
+          body: 'You will now receive hustle reminders even when the app is closed.',
+          icon: '/favicon.ico'
+        });
+        
+        // Close the notification after 5 seconds
+        setTimeout(() => testNotification.close(), 5000);
+      }
     }
   };
   
@@ -130,93 +157,13 @@ export default function ReminderForm() {
       reminderDate.setHours(hours, minutes, 0, 0);
       
       if (reminderDate > new Date()) {
-        scheduleNotification(
-          'Hustle Planner Reminder', 
-          reminder.message, 
-          reminderDate
-        );
+        // Note: Browser notifications are handled by the checkReminders interval
       }
     }
   };
   
-  // Delete a reminder
-  const handleDeleteReminder = (id: string) => {
-    setReminders(prev => prev.filter(reminder => reminder.id !== id));
-  };
-  
-  // Toggle a reminder on/off
-  const handleToggleReminder = (id: string) => {
-    setReminders(prev => 
-      prev.map(reminder => 
-        reminder.id === id 
-          ? { ...reminder, enabled: !reminder.enabled } 
-          : reminder
-      )
-    );
-  };
-  
-  // Update an existing reminder
-  const handleUpdateReminder = (id: string, updates: Partial<Reminder>) => {
-    setReminders(prev => 
-      prev.map(reminder => 
-        reminder.id === id 
-          ? { ...reminder, ...updates } 
-          : reminder
-      )
-    );
-  };
-  
-  // Check if any reminders need to be triggered
-  const checkReminders = () => {
-    if (notificationPermission !== 'granted' || typeof window === 'undefined') return;
-    
-    const now = new Date();
-    const currentDate = now.toISOString().split('T')[0];
-    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    
-    reminders.forEach(reminder => {
-      if (reminder.enabled) {
-        // Check if this reminder should fire now
-        if (reminder.time === currentTime) {
-          let shouldFire = false;
-          
-          // Handle different repeat types
-          switch(reminder.repeats) {
-            case 'none':
-              // For one-time reminders, only fire if the date matches
-              shouldFire = reminder.date === currentDate;
-              break;
             
-            case 'daily':
-              // For daily reminders, fire every day at the specified time
-              shouldFire = true;
-              break;
-            
-            case 'weekly':
-              // For weekly reminders, fire on the same day of week
-              const reminderDate = new Date();
-              const [year, month, day] = reminder.date.split('-').map(Number);
-              reminderDate.setFullYear(year, month - 1, day);
-              shouldFire = reminderDate.getDay() === now.getDay();
-              break;
-          }
-          
-          if (shouldFire) {
-            // Send the notification
-            new Notification('Hustle Planner Reminder', {
-              body: reminder.message,
-              icon: '/favicon.ico'
-            });
-            
-            // If reminder is not repeating, disable it after triggering
-            if (reminder.repeats === 'none') {
-              handleUpdateReminder(reminder.id, { enabled: false });
-            }
-          }
-        }
-      }
-    });
-  };
+// ...existing code...
   
   return (
     <div className="space-y-6">
@@ -399,7 +346,7 @@ export default function ReminderForm() {
                   <input
                     type="checkbox"
                     checked={reminder.enabled}
-                    onChange={() => handleToggleReminder(reminder.id)}
+                    onChange={() => handleToggleReminder(reminder.id, reminders, setReminders)}
                     className="form-checkbox h-5 w-5 text-pink-500 rounded mr-3"
                     aria-label={`Toggle ${reminder.message} reminder`}
                   />
@@ -423,7 +370,7 @@ export default function ReminderForm() {
                   </div>
                 </div>
                 <button
-                  onClick={() => handleDeleteReminder(reminder.id)}
+                  onClick={() => handleDeleteReminder(reminder.id, reminders, setReminders)}
                   className="text-gray-400 dark:text-gray-500 hover:text-red-400 dark:hover:text-red-500 p-1"
                   aria-label={`Delete ${reminder.message} reminder`}
                 >
@@ -440,6 +387,7 @@ export default function ReminderForm() {
   );
 }
 
-function scheduleNotification(arg0: string, message: string, reminderDate: Date) {
-  throw new Error('Function not implemented.');
-}
+
+// ...existing code...
+
+
