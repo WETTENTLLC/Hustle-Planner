@@ -10,6 +10,15 @@ interface Client {
   preferences: string;
   lastVisit: string;
   spendAmount: string;
+  totalSpent?: number;
+  visits?: Visit[];
+}
+
+interface Visit {
+  id: string;
+  date: string;
+  amount: number;
+  notes: string;
 }
 
 export default function ClientManager() {
@@ -51,6 +60,8 @@ export default function ClientManager() {
     const clientToAdd: Client = {
       ...newClient,
       id: Date.now().toString(),
+      totalSpent: 0,
+      visits: []
     };
     
     setClients([...clients, clientToAdd]);
