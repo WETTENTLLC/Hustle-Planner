@@ -147,8 +147,8 @@ export default function SmartInsights() {
       return acc;
     }, {});
 
-    const bestDay = Object.entries(dayEarnings).reduce((a: any, b: any) => 
-      dayEarnings[a[0]] > dayEarnings[b[0]] ? a : b
+    const bestDay = Object.entries(dayEarnings).reduce((a, b) => 
+      (dayEarnings[a[0]] || 0) > (dayEarnings[b[0]] || 0) ? a : b
     );
 
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -158,7 +158,7 @@ export default function SmartInsights() {
       type: 'pattern',
       priority: 'low',
       title: '📅 Peak Earning Day',
-      message: `${dayNames[parseInt(bestDay[0])]} is your best earning day (avg $${(bestDay[1] / earnings.filter(e => new Date(e.date).getDay() === parseInt(bestDay[0])).length).toFixed(0)}). Schedule more shifts on this day!`,
+      message: `${dayNames[parseInt(bestDay[0])]} is your best earning day (avg $${((bestDay[1] as number) / earnings.filter(e => new Date(e.date).getDay() === parseInt(bestDay[0])).length).toFixed(0)}). Schedule more shifts on this day!`,
       actionable: true,
       data: { bestDay: dayNames[parseInt(bestDay[0])], avgEarnings: bestDay[1] },
       dateGenerated: new Date().toISOString()
