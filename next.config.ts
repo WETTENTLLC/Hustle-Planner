@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   compress: true,
   output: 'export',
   trailingSlash: true,
+  distDir: 'out',
   images: {
     unoptimized: true,
   },
