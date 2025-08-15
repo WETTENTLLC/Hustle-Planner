@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   output: 'export',
   trailingSlash: true,
   distDir: 'out',
+  basePath: '/Hustle-Planner',
+  assetPrefix: '/Hustle-Planner',
   images: {
     unoptimized: true,
   },
