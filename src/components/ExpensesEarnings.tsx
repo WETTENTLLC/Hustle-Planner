@@ -125,6 +125,47 @@ export default function ExpensesEarnings() {
 
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   const totalEarnings = earnings.reduce((sum, earning) => sum + earning.total, 0);
+  const netIncome = totalEarnings - totalExpenses;
+  
+  // Tax calculations for independent contractors
+  const calculateTaxes = () => {
+    const selfEmploymentTaxRate = 0.1413; // 14.13% (Social Security + Medicare)
+    const federalTaxRate = 0.22; // Estimated 22% bracket for most entertainers
+    const stateTaxRate = 0.05; // Average state tax (varies by state)
+    
+    const selfEmploymentTax = netIncome * selfEmploymentTaxRate;
+    const federalTax = netIncome * federalTaxRate;
+    const stateTax = netIncome * stateTaxRate;
+    const totalTaxLiability = selfEmploymentTax + federalTax + stateTax;
+    
+    return {
+      selfEmploymentTax,
+      federalTax,
+      stateTax,
+      totalTaxLiability,
+      quarterlyPayment: totalTaxLiability / 4,
+      recommendedSavings: totalTaxLiability * 1.1 // 10% buffer
+    };
+  };
+  
+  const taxes = calculateTaxes();
+  
+  // Financial recommendations
+  const getFinancialAdvice = () => {
+    const monthlyIncome = netIncome / 12;
+    const emergencyFund = monthlyIncome * 6;
+    const savingsRate = 0.20; // 20% savings rate
+    const monthlySavings = monthlyIncome * savingsRate;
+    
+    return {
+      emergencyFund,
+      monthlySavings,
+      monthlyTaxSavings: taxes.recommendedSavings / 12,
+      monthlySpending: monthlyIncome - monthlySavings - (taxes.recommendedSavings / 12)
+    };
+  };
+  
+  const advice = getFinancialAdvice();
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -156,6 +197,100 @@ export default function ExpensesEarnings() {
           >
             Daily Earnings
           </button>
+        </div>
+
+        {/* Tax Calculator & Financial Dashboard */}
+        <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border-t border-gray-200 dark:border-gray-700 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Earnings</h4>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">${totalEarnings.toFixed(2)}</p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Expenses</h4>
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400">${totalExpenses.toFixed(2)}</p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400">Net Income</h4>
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">${netIncome.toFixed(2)}</p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400">Est. Tax Owed</h4>
+              <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">${taxes.totalTaxLiability.toFixed(2)}</p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Tax Breakdown */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold mb-4 text-orange-600 dark:text-orange-400">📊 Tax Breakdown (Annual)</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-sm">Self-Employment Tax (14.13%)</span>
+                  <span className="font-medium">${taxes.selfEmploymentTax.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">Federal Income Tax (~22%)</span>
+                  <span className="font-medium">${taxes.federalTax.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">State Tax (~5%)</span>
+                  <span className="font-medium">${taxes.stateTax.toFixed(2)}</span>
+                </div>
+                <div className="border-t pt-2 flex justify-between font-bold">
+                  <span>Total Tax Liability</span>
+                  <span>${taxes.totalTaxLiability.toFixed(2)}</span>
+                </div>
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded mt-4">
+                  <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">💰 Quarterly Payment: ${taxes.quarterlyPayment.toFixed(2)}</p>
+                  <p className="text-xs text-yellow-700 dark:text-yellow-300 mt-1">Set aside ${taxes.recommendedSavings.toFixed(2)} total (includes 10% buffer)</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Financial Recommendations */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold mb-4 text-blue-600 dark:text-blue-400">💡 Smart Money Management</h3>
+              <div className="space-y-4">
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded">
+                  <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">Monthly Budget Breakdown</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Tax Savings (${(taxes.recommendedSavings/12).toFixed(0)}/month)</span>
+                      <span className="font-medium">{((taxes.recommendedSavings/12) / (netIncome/12) * 100).toFixed(0)}%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Personal Savings (${advice.monthlySavings.toFixed(0)}/month)</span>
+                      <span className="font-medium">20%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Living Expenses</span>
+                      <span className="font-medium">{(advice.monthlySpending / (netIncome/12) * 100).toFixed(0)}%</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded">
+                  <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">🎯 Financial Goals</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Emergency Fund Target: ${advice.emergencyFund.toFixed(0)}</li>
+                    <li>• Monthly Savings Goal: ${advice.monthlySavings.toFixed(0)}</li>
+                    <li>• Tax Savings Account: ${(taxes.recommendedSavings/12).toFixed(0)}/month</li>
+                  </ul>
+                </div>
+                
+                <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded">
+                  <h4 className="font-medium text-purple-800 dark:text-purple-200 mb-2">📈 Pro Tips</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• Open separate savings accounts for taxes</li>
+                    <li>• Track ALL business expenses for deductions</li>
+                    <li>• Make quarterly tax payments to avoid penalties</li>
+                    <li>• Consider a SEP-IRA for retirement savings</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="p-6">

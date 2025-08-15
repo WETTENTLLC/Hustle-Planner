@@ -8,6 +8,7 @@ import ClientManager from '@/components/ClientManager';
 import ClientLoyalty from '@/components/ClientLoyalty';
 import HabitTracker from '@/components/HabitTracker';
 import ExpensesEarnings from '@/components/ExpensesEarnings';
+import HowToUse from '@/components/HowToUse';
 import FAQSection from '@/components/FAQSection';
 import Navigation from '@/components/Navigation';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -96,6 +97,13 @@ export default function Home() {
           
           {activeTab === 'expenses' && (
             <ExpensesEarnings />
+          )}
+          
+          {activeTab === 'how-to-use' && (
+            <>
+              <h2 className="text-2xl font-bold mb-6 text-pink-400 dark:text-pink-600">How to Use Your Hustle Planner</h2>
+              <HowToUse />
+            </>
           )}
           
           {activeTab === 'faq' && (
