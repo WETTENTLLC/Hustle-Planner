@@ -8,30 +8,164 @@ export default function HowToUse() {
   const sections = [
     {
       id: 'overview',
-      title: '🎯 Success Strategy Overview',
+      title: '🎯 Complete Feature Overview',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <p className="text-lg font-medium text-pink-400 dark:text-pink-600">
-            This planner is designed to maximize your income and build long-term financial success.
+            Your complete business management system with 11 powerful tools to maximize income and build wealth.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-              <h4 className="font-bold text-green-400 mb-2">💰 Income Maximization</h4>
-              <ul className="text-sm space-y-1">
-                <li>• Track every dollar earned</li>
-                <li>• Identify your highest-earning shifts</li>
-                <li>• Focus on VIP clients who spend more</li>
-                <li>• Set and track income goals</li>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
+              <h4 className="font-bold text-purple-400 mb-2">📅 Shift Planner</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Schedule optimal work times</li>
+                <li>• Set income goals per shift</li>
+                <li>• Track actual vs planned earnings</li>
+                <li>• Identify peak earning periods</li>
               </ul>
             </div>
+            
             <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-              <h4 className="font-bold text-blue-400 mb-2">📊 Business Management</h4>
-              <ul className="text-sm space-y-1">
-                <li>• Deduct ALL business expenses</li>
-                <li>• Build client relationships</li>
-                <li>• Plan optimal work schedules</li>
-                <li>• Prepare for tax season</li>
+              <h4 className="font-bold text-blue-400 mb-2">⏰ Smart Reminders</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Browser notifications</li>
+                <li>• Daily, weekly, or one-time alerts</li>
+                <li>• Works even when tab is closed</li>
+                <li>• Never miss important tasks</li>
               </ul>
+            </div>
+            
+            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+              <h4 className="font-bold text-green-400 mb-2">👥 Client Manager</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Track client preferences</li>
+                <li>• Record spending patterns</li>
+                <li>• Store personal notes</li>
+                <li>• Build stronger relationships</li>
+              </ul>
+            </div>
+            
+            <div className="bg-pink-500/10 border border-pink-500/30 rounded-lg p-4">
+              <h4 className="font-bold text-pink-400 mb-2">💎 Client Loyalty</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Prioritize by spending amount</li>
+                <li>• Track visit history</li>
+                <li>• Expert advice for each tier</li>
+                <li>• Maximize repeat business</li>
+              </ul>
+            </div>
+            
+            <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+              <h4 className="font-bold text-orange-400 mb-2">💪 Habit Tracker</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Daily success routines</li>
+                <li>• Physical & mental wellness</li>
+                <li>• Business development habits</li>
+                <li>• Consistency tracking</li>
+              </ul>
+            </div>
+            
+            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+              <h4 className="font-bold text-yellow-600 mb-2">💡 Hustle Tips</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Expert earning strategies</li>
+                <li>• Client relationship advice</li>
+                <li>• Stage presence tips</li>
+                <li>• Professional mindset guidance</li>
+              </ul>
+            </div>
+            
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+              <h4 className="font-bold text-red-400 mb-2">💰 Expenses & Earnings</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Track all business expenses</li>
+                <li>• Daily earnings breakdown</li>
+                <li>• Automatic tax calculations</li>
+                <li>• Quarterly payment planning</li>
+              </ul>
+            </div>
+            
+            <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-4">
+              <h4 className="font-bold text-cyan-400 mb-2">⚡ Opportunities</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Track business partnerships</li>
+                <li>• Shopping & travel plans</li>
+                <li>• Investment opportunities</li>
+                <li>• Automated follow-up alerts</li>
+              </ul>
+            </div>
+            
+            <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-lg p-4">
+              <h4 className="font-bold text-indigo-400 mb-2">🧠 Smart Insights</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Pattern recognition</li>
+                <li>• Earnings trend analysis</li>
+                <li>• Client behavior insights</li>
+                <li>• Performance optimization</li>
+              </ul>
+            </div>
+            
+            <div className="bg-teal-500/10 border border-teal-500/30 rounded-lg p-4">
+              <h4 className="font-bold text-teal-400 mb-2">📚 How To Use</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Complete success guide</li>
+                <li>• Feature explanations</li>
+                <li>• Best practices</li>
+                <li>• Growth strategies</li>
+              </ul>
+            </div>
+            
+            <div className="bg-gray-500/10 border border-gray-500/30 rounded-lg p-4">
+              <h4 className="font-bold text-gray-400 mb-2">❓ FAQ</h4>
+              <ul className="text-xs space-y-1">
+                <li>• Privacy & security info</li>
+                <li>• Technical support</li>
+                <li>• Feature questions</li>
+                <li>• Troubleshooting help</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/30 rounded-lg p-6">
+            <h4 className="font-bold text-pink-400 mb-3 text-lg">🚀 Why This System Works</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <h5 className="font-semibold mb-2 text-green-400">💰 Income Maximization:</h5>
+                <ul className="space-y-1 list-disc list-inside">
+                  <li>Track every revenue stream</li>
+                  <li>Identify your most profitable activities</li>
+                  <li>Focus on high-value clients</li>
+                  <li>Optimize your schedule for peak earnings</li>
+                </ul>
+              </div>
+              <div>
+                <h5 className="font-semibold mb-2 text-blue-400">📊 Business Intelligence:</h5>
+                <ul className="space-y-1 list-disc list-inside">
+                  <li>Data-driven decision making</li>
+                  <li>Pattern recognition for growth</li>
+                  <li>Automated opportunity alerts</li>
+                  <li>Performance optimization insights</li>
+                </ul>
+              </div>
+              <div>
+                <h5 className="font-semibold mb-2 text-purple-400">🔒 Privacy & Security:</h5>
+                <ul className="space-y-1 list-disc list-inside">
+                  <li>100% local storage - no cloud</li>
+                  <li>Encrypted data protection</li>
+                  <li>No accounts or logins required</li>
+                  <li>Complete anonymity guaranteed</li>
+                </ul>
+              </div>
+              <div>
+                <h5 className="font-semibold mb-2 text-orange-400">💼 Professional Tools:</h5>
+                <ul className="space-y-1 list-disc list-inside">
+                  <li>Tax calculation & planning</li>
+                  <li>Expense optimization</li>
+                  <li>Client relationship management</li>
+                  <li>Long-term wealth building</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -275,11 +409,24 @@ export default function HowToUse() {
       </div>
 
       <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-lg p-6 mt-8">
-        <h3 className="font-bold text-lg mb-3 text-green-400 dark:text-green-600">💡 Pro Tip</h3>
-        <p className="text-sm">
-          Spend 10 minutes each day updating your planner. This small investment will pay huge dividends in increased earnings, 
-          tax savings, and career growth. Consistency is the key to success!
-        </p>
+        <h3 className="font-bold text-lg mb-3 text-green-400 dark:text-green-600">💡 Success Formula</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div className="text-center">
+            <div className="text-2xl mb-2">📊</div>
+            <h4 className="font-semibold mb-1">Track Everything</h4>
+            <p className="text-xs">10 minutes daily = Complete business intelligence</p>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl mb-2">🎯</div>
+            <h4 className="font-semibold mb-1">Follow Insights</h4>
+            <p className="text-xs">Act on smart recommendations = Higher earnings</p>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl mb-2">💰</div>
+            <h4 className="font-semibold mb-1">Build Wealth</h4>
+            <p className="text-xs">Consistent use = Financial freedom</p>
+          </div>
+        </div>
       </div>
     </div>
   );
