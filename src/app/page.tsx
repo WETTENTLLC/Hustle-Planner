@@ -9,6 +9,8 @@ import ClientLoyalty from '@/components/ClientLoyalty';
 import HabitTracker from '@/components/HabitTracker';
 import ExpensesEarnings from '@/components/ExpensesEarnings';
 import HowToUse from '@/components/HowToUse';
+import ClientOpportunities from '@/components/ClientOpportunities';
+import SmartInsights from '@/components/SmartInsights';
 import FAQSection from '@/components/FAQSection';
 import Navigation from '@/components/Navigation';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -97,6 +99,20 @@ export default function Home() {
           
           {activeTab === 'expenses' && (
             <ExpensesEarnings />
+          )}
+          
+          {activeTab === 'opportunities' && (
+            <>
+              <h2 className="text-2xl font-bold mb-6 text-pink-400 dark:text-pink-600">Client Opportunities & Action Plans</h2>
+              <ClientOpportunities />
+            </>
+          )}
+          
+          {activeTab === 'insights' && (
+            <>
+              <h2 className="text-2xl font-bold mb-6 text-pink-400 dark:text-pink-600">Smart Insights & Analytics</h2>
+              <SmartInsights />
+            </>
           )}
           
           {activeTab === 'how-to-use' && (

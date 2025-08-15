@@ -266,7 +266,7 @@ export default function HowToUse() {
             </button>
 
             {openSection === section.id && (
-              <div className="px-4 py-4 bg-gray-900/40 dark:bg-gray-50">
+              <div className="px-4 py-4 bg-gray-900/40 dark:bg-gray-50 text-gray-200 dark:text-gray-800">
                 {section.content}
               </div>
             )}
