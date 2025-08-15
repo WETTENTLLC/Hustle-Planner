@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getLocalStorage } from '@/lib/utils';
+import SystemTesting from './SystemTesting';
 
 interface Insight {
   id: string;
@@ -371,6 +372,8 @@ export default function SmartInsights() {
           <li>• Updates automatically as you use the planner</li>
         </ul>
       </div>
+      
+      <SystemTesting />
     </div>
   );
 }
