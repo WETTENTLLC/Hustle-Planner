@@ -1,8 +1,35 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getLocalStorage } from '@/lib/utils';
 import SystemTesting from './SystemTesting';
+
+interface Opportunity {
+  id: string;
+  clientId: string;
+  status: string;
+  followUpDate: string;
+  potentialValue: number;
+}
+
+interface InsightData {
+  clientId?: string;
+  daysSince?: number;
+  clients?: string[];
+  changePercent?: number;
+  recentAvg?: number;
+  previousAvg?: number;
+  bestDay?: string;
+  avgEarnings?: number;
+  category?: string;
+  amount?: number;
+  percentage?: number;
+  count?: number;
+  opportunities?: Opportunity[];
+  totalValue?: number;
+  avgHours?: number;
+  hourlyRate?: number;
+}
 
 interface Insight {
   id: string;
@@ -11,7 +38,7 @@ interface Insight {
   title: string;
   message: string;
   actionable: boolean;
-  data?: any;
+  data?: InsightData;
   dateGenerated: string;
 }
 
@@ -19,20 +46,39 @@ export default function SmartInsights() {
   const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    generateInsights();
-  }, []);
+  interface ClientData {
+    id: string;
+    name: string;
+    totalSpent?: number;
+    lastVisit?: string;
+    visits?: Array<{ id: string; date: string; amount: number; notes: string }>;
+  }
 
-  const generateInsights = () => {
+  interface EarningData {
+    date: string;
+    total: number;
+  }
+
+  interface ExpenseData {
+    category: string;
+    amount: number;
+  }
+
+  interface ShiftData {
+    startTime: string;
+    endTime: string;
+  }
+
+  const generateInsights = useCallback(() => {
     setLoading(true);
     const newInsights: Insight[] = [];
 
     // Get all data
-    const clients = getLocalStorage<any[]>('hustle-clients', []);
-    const earnings = getLocalStorage<any[]>('work-earnings', []);
-    const expenses = getLocalStorage<any[]>('work-expenses', []);
-    const opportunities = getLocalStorage<any[]>('client-opportunities', []);
-    const shifts = getLocalStorage<any[]>('hustle-shifts', []);
+    const clients = getLocalStorage<ClientData[]>('hustle-clients', []);
+    const earnings = getLocalStorage<EarningData[]>('work-earnings', []);
+    const expenses = getLocalStorage<ExpenseData[]>('work-expenses', []);
+    const opportunities = getLocalStorage<Opportunity[]>('client-opportunities', []);
+    const shifts = getLocalStorage<ShiftData[]>('hustle-shifts', []);
 
     // Analyze client spending patterns
     analyzeClientPatterns(clients, newInsights);
@@ -51,14 +97,20 @@ export default function SmartInsights() {
 
     setInsights(newInsights);
     setLoading(false);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const analyzeClientPatterns = (clients: any[], insights: Insight[]) => {
+  useEffect(() => {
+    generateInsights();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const analyzeClientPatterns = (clients: ClientData[], insights: Insight[]) => {
     if (clients.length === 0) return;
 
     // Find top spenders
     const topSpenders = clients
-      .filter(c => c.totalSpent > 0)
+      .filter(c => (c.totalSpent || 0) > 0)
       .sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0))
       .slice(0, 3);
 
@@ -87,7 +139,7 @@ export default function SmartInsights() {
       if (visits.length < 2) return false;
       
       const recentVisits = visits.slice(-3);
-      const avgSpend = recentVisits.reduce((sum: number, v: any) => sum + v.amount, 0) / recentVisits.length;
+      const avgSpend = recentVisits.reduce((sum, v) => sum + v.amount, 0) / recentVisits.length;
       return avgSpend > 100 && avgSpend < 500; // Sweet spot for upselling
     });
 
@@ -105,7 +157,7 @@ export default function SmartInsights() {
     }
   };
 
-  const analyzeEarningsTrends = (earnings: any[], insights: Insight[]) => {
+  const analyzeEarningsTrends = (earnings: EarningData[], insights: Insight[]) => {
     if (earnings.length < 7) return;
 
     const last7Days = earnings.slice(-7);
@@ -141,14 +193,14 @@ export default function SmartInsights() {
     }
 
     // Analyze best earning days
-    const dayEarnings = earnings.reduce((acc: any, e) => {
+    const dayEarnings = earnings.reduce((acc: Record<number, number>, e) => {
       const day = new Date(e.date).getDay();
       acc[day] = (acc[day] || 0) + e.total;
       return acc;
-    }, {});
+    }, {} as Record<number, number>);
 
     const bestDay = Object.entries(dayEarnings).reduce((a, b) => 
-      (dayEarnings[a[0]] || 0) > (dayEarnings[b[0]] || 0) ? a : b
+      (dayEarnings[parseInt(a[0])] || 0) > (dayEarnings[parseInt(b[0])] || 0) ? a : b
     );
 
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -165,19 +217,19 @@ export default function SmartInsights() {
     });
   };
 
-  const analyzeExpenseOptimization = (expenses: any[], insights: Insight[]) => {
+  const analyzeExpenseOptimization = (expenses: ExpenseData[], insights: Insight[]) => {
     if (expenses.length === 0) return;
 
-    const monthlyExpenses = expenses.reduce((acc: any, e) => {
+    const monthlyExpenses = expenses.reduce((acc: Record<string, number>, e) => {
       const category = e.category;
       acc[category] = (acc[category] || 0) + e.amount;
       return acc;
-    }, {});
+    }, {} as Record<string, number>);
 
-    const totalExpenses = Object.values(monthlyExpenses).reduce((sum: number, amount: any) => sum + amount, 0);
+    const totalExpenses = Object.values(monthlyExpenses).reduce((sum, amount) => sum + amount, 0);
     
     // Find highest expense category
-    const highestExpense = Object.entries(monthlyExpenses).reduce((a: any, b: any) => 
+    const highestExpense = Object.entries(monthlyExpenses).reduce((a, b) => 
       a[1] > b[1] ? a : b
     );
 
@@ -195,7 +247,7 @@ export default function SmartInsights() {
     }
   };
 
-  const analyzeOpportunityManagement = (opportunities: any[], clients: any[], insights: Insight[]) => {
+  const analyzeOpportunityManagement = (opportunities: Opportunity[], clients: ClientData[], insights: Insight[]) => {
     const activeOpportunities = opportunities.filter(o => o.status === 'new' || o.status === 'in_progress');
     const overdueOpportunities = activeOpportunities.filter(o => new Date(o.followUpDate) < new Date());
 
@@ -227,7 +279,7 @@ export default function SmartInsights() {
     }
   };
 
-  const analyzeWorkPatterns = (shifts: any[], earnings: any[], insights: Insight[]) => {
+  const analyzeWorkPatterns = (shifts: ShiftData[], earnings: EarningData[], insights: Insight[]) => {
     if (shifts.length < 5) return;
 
     const recentShifts = shifts.slice(-10);

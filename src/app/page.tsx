@@ -16,6 +16,8 @@ import Navigation from '@/components/Navigation';
 import ThemeToggle from '@/components/ThemeToggle';
 import Footer from '@/components/Footer';
 import PrivacyNotice from '@/components/PrivacyNotice';
+import DataStorageNotice from '@/components/DataStorageNotice';
+import StorageDiagnostics from '@/components/StorageDiagnostics';
 import { useTheme } from '@/components/ThemeProvider';
 
 export default function Home() {
@@ -136,6 +138,12 @@ export default function Home() {
       
       {/* Privacy Notice */}
       <PrivacyNotice />
+      
+      {/* Data Storage Notice */}
+      <DataStorageNotice />
+      
+      {/* Storage Diagnostics Tool */}
+      <StorageDiagnostics />
     </main>
   );
 }

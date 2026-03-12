@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { generateId, getLocalStorage } from '@/lib/utils';
+import { generateId, getLocalStorage, setLocalStorage } from '@/lib/utils';
 
 interface Reminder {
   id: string;
@@ -104,7 +104,14 @@ export default function ReminderForm() {
       checkReminders();
     }, 60000);
     return () => clearInterval(checkInterval);
-  }, [checkReminders]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount - checkReminders updates via closure
+  
+  // Save reminders to localStorage whenever they change
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setLocalStorage('hustle-reminders', reminders);
+  }, [reminders]);
   const handleRequestPermission = async () => {
     if ('Notification' in window) {
       const permission = await Notification.requestPermission();

@@ -32,7 +32,7 @@ export default function PrivacyNotice() {
         <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300 mb-6">
           <p>✅ <strong>No account required</strong> - Use immediately</p>
           <p>✅ <strong>No cloud storage</strong> - All data stays on your device</p>
-          <p>✅ <strong>No tracking</strong> - We don't collect any personal information</p>
+          <p>✅ <strong>No tracking</strong> - We don&apos;t collect any personal information</p>
           <p>✅ <strong>Encrypted storage</strong> - Your data is protected locally</p>
           <p>✅ <strong>Auto-save</strong> - Never lose your information</p>
         </div>

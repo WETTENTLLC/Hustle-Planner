@@ -30,7 +30,7 @@ export default function ClientLoyalty() {
   // Load clients from localStorage
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const savedClients = getLocalStorage<any[]>('hustle-clients', []);
+    const savedClients = getLocalStorage<Client[]>('hustle-clients', []);
     const clientsWithVisits = savedClients.map(client => ({
       ...client,
       totalSpent: client.totalSpent || 0,

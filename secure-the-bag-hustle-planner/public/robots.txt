@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /
-
-# Privacy-focused app - no indexing needed

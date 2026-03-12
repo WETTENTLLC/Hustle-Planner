@@ -18,11 +18,18 @@ interface Opportunity {
   notes: string[];
 }
 
+interface Visit {
+  id: string;
+  date: string;
+  amount: number;
+  notes: string;
+}
+
 interface Client {
   id: string;
   name: string;
   totalSpent: number;
-  visits: any[];
+  visits: Visit[];
   opportunities: Opportunity[];
 }
 
@@ -73,7 +80,7 @@ export default function ClientOpportunities() {
       title: newOpportunity.title,
       description: newOpportunity.description,
       potentialValue: parseFloat(newOpportunity.potentialValue) || OPPORTUNITY_TYPES[newOpportunity.type].value,
-      priority: OPPORTUNITY_TYPES[newOpportunity.type].priority as any,
+      priority: OPPORTUNITY_TYPES[newOpportunity.type].priority as Opportunity['priority'],
       status: 'new',
       dateCreated: new Date().toISOString().split('T')[0],
       followUpDate: newOpportunity.followUpDate,
@@ -96,11 +103,22 @@ export default function ClientOpportunities() {
     setShowAddForm(false);
   };
 
+  interface Reminder {
+    id: string;
+    time: string;
+    date: string;
+    message: string;
+    enabled: boolean;
+    repeats: string;
+    priority: string;
+    opportunityId: string;
+  }
+
   const createSmartReminder = (opportunity: Opportunity) => {
     const client = clients.find(c => c.id === opportunity.clientId);
     if (!client) return;
 
-    const reminders = getLocalStorage<any[]>('hustle-reminders', []);
+    const reminders = getLocalStorage<Reminder[]>('hustle-reminders', []);
     
     // Create immediate follow-up reminder
     const followUpReminder = {
@@ -149,10 +167,6 @@ export default function ClientOpportunities() {
       return opp;
     });
     saveOpportunities(updatedOpportunities);
-  };
-
-  const getClientOpportunities = (clientId: string) => {
-    return opportunities.filter(opp => opp.clientId === clientId);
   };
 
   const getUrgentOpportunities = () => {
@@ -255,7 +269,7 @@ export default function ClientOpportunities() {
               
               <select
                 value={newOpportunity.type}
-                onChange={(e) => setNewOpportunity(prev => ({...prev, type: e.target.value as any}))}
+                onChange={(e) => setNewOpportunity(prev => ({...prev, type: e.target.value as keyof typeof OPPORTUNITY_TYPES}))}
                 className="bg-gray-800 dark:bg-white border border-gray-600 dark:border-gray-300 rounded px-3 py-2 text-white dark:text-gray-800"
               >
                 {Object.entries(OPPORTUNITY_TYPES).map(([key, value]) => (

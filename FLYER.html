@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hustle Planner Flyer - Print Me!</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .flyer {
+            width: 8.5in;
+            height: 11in;
+            background: linear-gradient(135deg, #1a0a1a 0%, #2d1b3d 50%, #1a0a1a 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        /* Decorative elements */
+        .flyer::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            border-radius: 50%;
+        }
+        
+        .flyer::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            border-radius: 50%;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 0.75in;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+        
+        .tagline {
+            color: #ec4899;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: #d1d5db;
+            font-size: 16px;
+            font-style: italic;
+        }
+        
+        .main-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .features {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(236, 72, 153, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .features h2 {
+            color: #ec4899;
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 15px;
+        }
+        
+        .feature-icon {
+            font-size: 20px;
+            min-width: 20px;
+        }
+        
+        .privacy-badge {
+            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .privacy-badge h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .privacy-badge p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .qr-section {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px dashed #ec4899;
+        }
+        
+        .qr-placeholder {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 10px;
+            background: #f3f4f6;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .url-box {
+            background: #1f2937;
+            color: #ec4899;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+        
+        .tear-off {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 2px dashed #6b7280;
+            padding: 15px 0.75in;
+        }
+        
+        .tear-off-tabs {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+        }
+        
+        .tab {
+            flex: 1;
+            border: 2px solid #ec4899;
+            border-radius: 8px;
+            padding: 8px 5px;
+            text-align: center;
+            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            transform: rotate(0deg);
+        }
+        
+        .tab-url {
+            display: block;
+            font-size: 9px;
+            margin-top: 3px;
+            word-break: break-all;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .flyer {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="flyer">
+        <div class="content">
+            <div class="header">
+                <div class="logo">SECURE THE BAG</div>
+                <div class="tagline">Hustle Planner</div>
+                <div class="subtitle">Made for dancers, by dancers</div>
+            </div>
+            
+            <div class="main-section">
+                <div class="features">
+                    <h2>✨ Everything You Need to Level Up ✨</h2>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <span class="feature-icon">💰</span>
+                            <span>Track earnings & tips</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">👯</span>
+                            <span>Manage regulars & VIPs</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📅</span>
+                            <span>Schedule your shifts</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">💸</span>
+                            <span>Track business expenses</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">⏰</span>
+                            <span>Set smart reminders</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📊</span>
+                            <span>See your money trends</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✅</span>
+                            <span>Daily habit tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🎯</span>
+                            <span>Set & crush goals</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="privacy-badge">
+                    <h3>🔒 100% Private & Secure</h3>
+                    <p>No login • No cloud • No tracking<br>
+                    All your data stays on YOUR device<br>
+                    <strong>FREE FOREVER</strong></p>
+                </div>
+                
+                <div class="qr-section">
+                    <div class="qr-placeholder">
+                        📱 SCAN ME!<br><br>
+                        Add QR code here:<br>
+                        wettentllc.github.io/Hustle-Planner
+                    </div>
+                    <div class="url-box">
+                        wettentllc.github.io/Hustle-Planner
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tear-off">
+            <div class="tear-off-tabs">
+                <div class="tab">
+                    FREE PLANNER 💕
+                    <span class="tab-url">wettentllc.github.io/Hustle-Planner</span>
+                </div>
+                <div class="tab">
+                    FREE PLANNER 💕
+                    <span class="tab-url">wettentllc.github.io/Hustle-Planner</span>
+                </div>
+                <div class="tab">
+                    FREE PLANNER 💕
+                    <span class="tab-url">wettentllc.github.io/Hustle-Planner</span>
+                </div>
+                <div class="tab">
+                    FREE PLANNER 💕
+                    <span class="tab-url">wettentllc.github.io/Hustle-Planner</span>
+                </div>
+                <div class="tab">
+                    FREE PLANNER 💕
+                    <span class="tab-url">wettentllc.github.io/Hustle-Planner</span>
+                </div>
+                <div class="tab">
+                    FREE PLANNER 💕
+                    <span class="tab-url">wettentllc.github.io/Hustle-Planner</span>
+                </div>
+                <div class="tab">
+                    FREE PLANNER 💕
+                    <span class="tab-url">wettentllc.github.io/Hustle-Planner</span>
+                </div>
+                <div class="tab">
+                    FREE PLANNER 💕
+                    <span class="tab-url">wettentllc.github.io/Hustle-Planner</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

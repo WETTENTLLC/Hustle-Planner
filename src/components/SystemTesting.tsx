@@ -2,13 +2,22 @@
 
 import { useState } from 'react';
 
+interface TestResult {
+  test: string;
+  input: string;
+  expected: string;
+  actual: string;
+  passed: boolean;
+  logic: string;
+}
+
 export default function SystemTesting() {
-  const [testResults, setTestResults] = useState<any[]>([]);
+  const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [isRunning, setIsRunning] = useState(false);
 
   const runAccuracyTests = () => {
     setIsRunning(true);
-    const results: any[] = [];
+    const results: TestResult[] = [];
 
     // Test 1: Client Priority Algorithm
     const testClient = {
@@ -123,7 +132,7 @@ export default function SystemTesting() {
       { amount: 150, date: '2024-01-03' }, // Valid
     ];
 
-    const validateData = (data: any[]) => {
+    const validateData = (data: Array<{ amount: number; date: string }>) => {
       return data.filter(item => 
         item.amount > 0 && 
         item.date && 
@@ -156,7 +165,7 @@ export default function SystemTesting() {
       <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
         <h3 className="text-lg font-bold text-blue-400 dark:text-blue-600 mb-3">🧪 System Accuracy Testing</h3>
         <p className="text-sm text-gray-300 dark:text-gray-700 mb-4">
-          This demonstrates how the "smart" features work using deterministic rules and statistical analysis.
+          This demonstrates how the &quot;smart&quot; features work using deterministic rules and statistical analysis.
           No AI or machine learning - just reliable, testable algorithms.
         </p>
         

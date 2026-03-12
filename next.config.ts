@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   
+  // CSP headers disabled for local development - re-enable for production
+  /*
   async headers() {
     return [
       {
@@ -35,6 +37,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  */
 };
 
 export default nextConfig;

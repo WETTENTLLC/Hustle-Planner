@@ -51,16 +51,89 @@ export function generateId(): string {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-// Handle localStorage with type safety
+// Handle localStorage with type safety and error handling
 export function getLocalStorage<T>(key: string, defaultValue: T): T {
   if (typeof window === 'undefined') return defaultValue;
-  const stored = localStorage.getItem(key);
-  return stored ? JSON.parse(stored) : defaultValue;
+  
+  try {
+    // Check if localStorage is available
+    if (!isLocalStorageAvailable()) {
+      console.warn(`localStorage is not available. Using default value for key: ${key}`);
+      return defaultValue;
+    }
+    
+    const stored = localStorage.getItem(key);
+    if (!stored) return defaultValue;
+    
+    return JSON.parse(stored) as T;
+  } catch (error) {
+    console.error(`Failed to retrieve data from localStorage (${key}):`, error);
+    // Return default value on any error
+    return defaultValue;
+  }
 }
 
-export function setLocalStorage<T>(key: string, value: T): void {
+export function setLocalStorage<T>(key: string, value: T): boolean {
+  if (typeof window === 'undefined') return false;
+  
+  try {
+    // Check if localStorage is available
+    if (!isLocalStorageAvailable()) {
+      console.error('localStorage is not available. Data will not persist.');
+      showStorageNotification('error', 'Storage unavailable - your changes may not be saved');
+      return false;
+    }
+    
+    const serialized = JSON.stringify(value);
+    localStorage.setItem(key, serialized);
+    return true;
+  } catch (error) {
+    // Handle quota exceeded or other errors
+    if (error instanceof Error) {
+      if (error.name === 'QuotaExceededError') {
+        console.error('localStorage quota exceeded');
+        showStorageNotification('error', 'Storage full - please delete some old data');
+      } else {
+        console.error(`Failed to save data to localStorage (${key}):`, error);
+        showStorageNotification('error', 'Failed to save data - please try again');
+      }
+    }
+    return false;
+  }
+}
+
+// Check if localStorage is available and working
+export function isLocalStorageAvailable(): boolean {
+  try {
+    const testKey = '__localStorage_test__';
+    localStorage.setItem(testKey, 'test');
+    localStorage.removeItem(testKey);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Show notification to user about storage issues
+function showStorageNotification(type: 'error' | 'warning', message: string): void {
+  // Create a temporary notification div if it doesn't exist
   if (typeof window === 'undefined') return;
-  localStorage.setItem(key, JSON.stringify(value));
+  
+  const notificationId = `storage-notification-${Date.now()}`;
+  const notification = document.createElement('div');
+  notification.id = notificationId;
+  notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white animate-pulse ${
+    type === 'error' ? 'bg-red-500' : 'bg-yellow-500'
+  }`;
+  notification.textContent = message;
+  
+  document.body.appendChild(notification);
+  
+  // Remove notification after 5 seconds
+  setTimeout(() => {
+    const el = document.getElementById(notificationId);
+    if (el) el.remove();
+  }, 5000);
 }
 
 // Check if two dates are the same day
